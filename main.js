@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'https://unpkg.com/three@0.139.2/examples/jsm/controls/OrbitControls.js';
-      
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -8,24 +8,39 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Add a cube to the scene
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// GLB loader
+const loader = new GLTFLoader();
+
+function quickLoad(path) {
+    loader.load( path, function ( gltf ) {
+
+        scene.add( gltf.scene );
+
+    }, undefined, function ( error ) {
+
+        console.error( error );
+
+    });
+};
+
+quickLoad('meshes/countertop.gltf');
+
+// Light!
+const ambientLight = new THREE.AmbientLight(0xafafaa, 5);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xfaaa50, 1);
+directionalLight.position.set(0, 3, -4).normalize();
+scene.add(directionalLight);
+
 
 // Position the camera
-camera.position.z = 5;
+camera.translateZ(3);
+camera.translateY(5);
+camera.rotateX(-.8);
 
-// Cam Controls
-const orbitControls = new OrbitControls(camera, renderer.domElement);
-orbitControls.maxPolarAngle = Math.PI * 0.5;
-orbitControls.minDistance = 0.1;
-orbitControls.maxDistance = 100;
-orbitControls.autoRotate = true;
-orbitControls.autoRotateSpeed = 10.0;
+scene.translateY(0);
 
 renderer.setAnimationLoop(() => {
-orbitControls.update();
 renderer.render(scene, camera);
 });
