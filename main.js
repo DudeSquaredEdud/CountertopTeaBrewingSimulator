@@ -10,7 +10,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // GLB loader
-const loader = new GLTFLoader();
+const loader = new GLTFLoader(); 
 
 function quickLoad(path) {
     loader.load( path, function ( gltf ) {
