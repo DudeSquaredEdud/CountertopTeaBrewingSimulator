@@ -14,6 +14,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Add the countertop to the scene.
+model.quickLoad(scene, "backWall", 'meshes/backWall.glb');
+model.quickLoad(scene, "wallsAndFloor", 'meshes/wallsAndFloor.glb');
 model.quickLoad(scene, "countertop", 'meshes/countertop.glb');
 model.quickLoad(scene, "mug", 'meshes/mug.glb', true);
 let mug;
