@@ -23,6 +23,6 @@ function onDocumentMouseMove(event) {
 export function updateCamera(camera) {
     // Adjust the camera's position based on the mouse's position
     // For some reason, these are swapped?
-    camera.rotation.y =  mouse.x;
-    camera.rotation.x =  mouse.y;  
+    camera.rotation.y =  camera.rotation.y - (camera.rotation.y-mouse.x)*.3;
+    camera.rotation.x =  camera.rotation.x - (camera.rotation.x-mouse.y)*.1;  
 }
