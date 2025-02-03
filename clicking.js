@@ -31,15 +31,16 @@ document.addEventListener('click', onMouseClick, false);
 
 // Custom function to handle object clicks
 function pingObject(object) {
+    let pingValue = 1.2;
     // Example: Change the object's color
     if (object.name == "Cylinder") {
-        object.material.color.r *= 1.1;
-        object.material.color.g *= 1.1;
-        object.material.color.b *= 1.1;
+        object.material.color.r *= pingValue;
+        object.material.color.g *= pingValue;
+        object.material.color.b *= pingValue;
         setTimeout(()=>{
-            object.material.color.r /= 1.1;
-            object.material.color.g /= 1.1;
-            object.material.color.b /= 1.1;
+            object.material.color.r /= pingValue;
+            object.material.color.g /= pingValue;
+            object.material.color.b /= pingValue;
         }, 100);
     }
 }
