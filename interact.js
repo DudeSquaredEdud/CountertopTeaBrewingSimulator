@@ -7,6 +7,9 @@
 import * as cam from "./camera.js";
 import * as main from "./main.js";
 
+var sip = new Audio('sounds/sip.mp3');
+var slurp = new Audio('sounds/slurp.mp3');
+
 export function click_interact(object){
     let mug = main.scene.getObjectByName("mug_model");
     let water = main.scene.getObjectByName("Water");
@@ -58,5 +61,45 @@ export function click_interact(object){
         break;
     }
 
+}
 
+export function button_interact(e, up = false){
+    switch(e.keyCode){
+        case 32:
+            drink(e, up);
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    button_interact(e)
+}
+);
+document.addEventListener('keyup',  (e) => {
+    button_interact(e, true)
+});
+
+var slurp_time = false;
+
+slurp.onended = () => {
+    let water = main.scene.getObjectByName("Water");
+    slurp.pause();
+    slurp.currentTime = 0;
+    water.material.visible = false;
+    water.material.color.r = 0.28750312328338623;
+    water.material.color.g = 0.6999994516372681;
+    water.material.color.b = 0.6829902529716492;
+};
+
+function drink(e, up){
+    let water = main.scene.getObjectByName("Water");
+    if (water.material.visible){
+        if (!up){
+            slurp.play();
+        }
+    else {
+        sip.play();
+        slurp.onended();
+        // Display how many tea points that was.
+    }
+}
 }
