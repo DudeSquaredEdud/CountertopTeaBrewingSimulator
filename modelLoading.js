@@ -17,7 +17,7 @@ function dumpObject(obj, lines = [], isLast = true, prefix = '') {
   }
 
 export var object;
-export function quickLoad(scene, name, path, dump = false) {
+export function quickLoad(scene, name, path, dump = true) {
     const loader = new GLTFLoader(); 
     loader.load( path, 
         ( gltf ) => {

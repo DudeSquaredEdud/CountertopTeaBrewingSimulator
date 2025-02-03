@@ -5,19 +5,20 @@
 
 // import * as THREE from 'three';
 import * as cam from "./camera.js";
+import * as main from "./main.js";
 
 
 
 export function interact(object){
     // Pick up mug
-    if (object.name == "Cylinder"){
+    if (object.name == "Mug"){
+        object = main.scene.getObjectByName("mug_model");
         if (!object.hand) {
-            object.position.set(0,0.0,0);
-            object.position.set(-5,1,-2);
+            object.position.set(0,4,3);
             object.hand = true;
         }
         else {
-            object.position.set(0,0.5,0);
+            object.position.set(0,3.5,-2);
             object.hand = false;
         }
     }

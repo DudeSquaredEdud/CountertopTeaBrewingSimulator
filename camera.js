@@ -10,8 +10,6 @@ export function neutralPos(start = false){
     if (start) main.camera.rotateX(-.3);
 }
 
-
-
 export function windowPos(){
     main.camera.position.set(0,6.5,-1);
 }
@@ -29,5 +27,13 @@ export function updateCamera() {
     // Adjust the camera's position based on the mouse's position
     // For some reason, these are swapped?
     main.camera.rotation.y =  main.camera.rotation.y - (main.camera.rotation.y-mouse.x)*.3;
-    main.camera.rotation.x =  main.camera.rotation.x - (main.camera.rotation.x-mouse.y)*.1;  
+    main.camera.rotation.x =  main.camera.rotation.x - (main.camera.rotation.x-mouse.y)*.1; 
+    if (main.loaded){
+        if (main.mug.hand){
+            // main.mug.position.y =  mouse.x;
+            main.mug.position.x = -mouse.x*1.3; 
+            main.mug.rotation.y = mouse.x*0.8+90;
+    
+        }
+    }
 }

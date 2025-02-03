@@ -27,9 +27,9 @@ function onLeftMouseClick(event) {
     const intersects = raycastIntersect(event)
 
     // Check if any objects were clicked
-    if (intersects.length > 0) {
+    if (intersects.length > 0 && event.ctrlKey) {
         const clickedObject = intersects[0].object;
-        console.log('Left clicked object:', clickedObject.name || clickedObject.uuid);
+        console.log('Left clicked object:', clickedObject.name || clickedObject.uuid, clickedObject.material);
 
         pingObject(clickedObject);
     }
@@ -57,7 +57,6 @@ document.addEventListener('contextmenu', onRightMouseClick, false);
 // Custom function to handle object clicks
 function pingObject(object) {
     let pingValue = 1.2;
-    if (object.name == "Cylinder") {
         object.material.color.r *= pingValue;
         object.material.color.g *= pingValue;
         object.material.color.b *= pingValue;
@@ -66,5 +65,4 @@ function pingObject(object) {
             object.material.color.g /= pingValue;
             object.material.color.b /= pingValue;
         }, 100);
-    }
 }
