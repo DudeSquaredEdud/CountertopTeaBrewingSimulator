@@ -5,13 +5,21 @@ import * as main from './main.js';
 var mouse = new THREE.Vector2();
 
 // Position the camera
-export function neutralPos(start = false){
-    main.camera.position.set(0,6,5);
-    if (start) main.camera.rotateX(-.3);
+export function neutralPos(start = false, object = main.camera, offset = [0,0,0]){
+    object.position.set(
+        0+offset[0],
+        6+offset[1],
+        5+offset[2]
+    );
+    if (start) object.rotateX(-.3);
 }
 
-export function windowPos(){
-    main.camera.position.set(0,6.5,-1);
+export function windowPos(object = main.camera, offset = [0,0,0]){
+    object.position.set(
+        0+  offset[0],
+        6.5+offset[1],
+        -1+ offset[2]
+    );
 }
 
 // Move the camera with the mouse a little bit
