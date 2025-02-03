@@ -14,14 +14,21 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Add the countertop to the scene.
+model.quickLoad(scene, "outside", 'meshes/outside.glb');
 model.quickLoad(scene, "backWall", 'meshes/backWall.glb');
 model.quickLoad(scene, "wallsAndFloor", 'meshes/wallsAndFloor.glb');
 model.quickLoad(scene, "countertop", 'meshes/countertop.glb');
 model.quickLoad(scene, "mug", 'meshes/mug.glb', true);
 let mug;
+let sky;
 setTimeout(() => { 
 mug = scene.getObjectByName("mug");
 mug.position.set(0,3.5,-2);
+mug.rotation.set(0,90,0);
+mug.hand = false;
+
+sky = scene.getObjectByName("Sky");
+sky.look = false;
 }, 500);
 
 
@@ -29,7 +36,7 @@ mug.position.set(0,3.5,-2);
 light.standardLight(scene);
 
 // set the camera to normal mode
-cam.neutralPos(camera);
+cam.neutralPos(true);
 
 renderer.setAnimationLoop(() => {
 renderer.render(scene, camera);

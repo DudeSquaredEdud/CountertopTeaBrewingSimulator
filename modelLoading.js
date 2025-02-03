@@ -1,3 +1,7 @@
+/**
+ * Model Loading - for loading models
+ */
+
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 function dumpObject(obj, lines = [], isLast = true, prefix = '') {

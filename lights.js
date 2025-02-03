@@ -1,3 +1,7 @@
+/**
+ * Lights - for handling lights.
+ */
+
 import * as THREE from 'three';
 
 // Light!
