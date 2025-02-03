@@ -10,10 +10,9 @@ import * as main from "./main.js";
 
 
 export function interact(object){
-    // Pick up mug
-    switch(object){
-        case object.name == "Mug":
-        case object.name == "Water":
+    switch(object.name){
+        case "Water":
+        case "Mug":
             object = main.scene.getObjectByName("mug_model");
             if (!object.hand) {
                 object.position.set(0,4,3);
@@ -24,7 +23,7 @@ export function interact(object){
                 object.hand = false;
             }
         break;
-        case object.name == "Sky":
+        case "Sky":
             if(!object.look){
                 cam.windowPos();
                 object.look = true;
