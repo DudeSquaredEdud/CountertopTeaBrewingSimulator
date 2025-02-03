@@ -48,7 +48,7 @@ function onRightMouseClick(event) {
         const clickedObject = intersects[0].object;
         console.log('Right Clicked object:', clickedObject.name || clickedObject.uuid);
 
-        interact.interact(clickedObject);
+        interact.click_interact(clickedObject);
     }
 
 }

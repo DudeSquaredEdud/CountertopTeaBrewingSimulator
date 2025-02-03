@@ -7,22 +7,23 @@
 import * as cam from "./camera.js";
 import * as main from "./main.js";
 
-
-
-export function interact(object){
+export function click_interact(object){
+    let mug = main.scene.getObjectByName("mug_model");
+    let water = main.scene.getObjectByName("Water");
     switch(object.name){
+        // THE MUG
         case "Water":
         case "Mug":
-            object = main.scene.getObjectByName("mug_model");
-            if (!object.hand) {
-                object.position.set(0,4,3);
-                object.hand = true;
+            if (!mug.hand) {
+                mug.position.set(0,4,3);
+                mug.hand = true;
             }
             else {
-                object.position.set(0,3.5,-2);
-                object.hand = false;
+                mug.position.set(0,3.5,-2);
+                mug.hand = false;
             }
         break;
+        // THE SKY
         case "Sky":
             if(!object.look){
                 cam.windowPos();
@@ -31,6 +32,26 @@ export function interact(object){
             else {
                 cam.neutralPos();
                 object.look = false;
+            }
+        break;
+        // THE LAKE
+        case "Lake":
+            if (mug.hand){
+                water.material.visible = true;
+            }
+        break;
+        // THE LEAVES
+        case "LeavesLeft":
+        case "LeavesMiddle":
+        case "LeavesRight":
+            if (water.material.visible == true && mug.hand == true){
+                water.material.color.r *= 0.8;
+                water.material.color.g *= 1.1;
+                water.material.color.b *= 0.8;
+
+                water.material.color.r -= 0.1;
+                water.material.color.g -= 0.1;
+                water.material.color.b -= 0.1;
             }
         break;
     }
