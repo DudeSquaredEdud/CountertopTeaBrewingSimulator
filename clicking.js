@@ -29,7 +29,7 @@ function onLeftMouseClick(event) {
     // Check if any objects were clicked
     if (intersects.length > 0 && event.ctrlKey) {
         const clickedObject = intersects[0].object;
-        console.log('Left clicked object:', clickedObject.name || clickedObject.uuid, clickedObject.material);
+        console.log('Left clicked object:', clickedObject.name || clickedObject.uuid, clickedObject, clickedObject.material);
 
         pingObject(clickedObject);
     }
