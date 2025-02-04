@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as init from "./initializations.js";
 
 export let loaded = false;
 export const scene = new THREE.Scene();
@@ -16,26 +17,7 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Add the countertop to the scene.
-model.quickLoad(scene, "outside_model", 'meshes/outside.glb');
-model.quickLoad(scene, "backWall_model", 'meshes/backWall.glb');
-model.quickLoad(scene, "wallsAndFloor_model", 'meshes/wallsAndFloor.glb');
-model.quickLoad(scene, "countertop_model", 'meshes/countertop.glb');
-model.quickLoad(scene, "mug_model", 'meshes/mug.glb', true);
-export let mug;
-let sky;
-setTimeout(() => { 
-mug = scene.getObjectByName("mug_model");
-mug.position.set(0,3.5,-2);
-mug.rotation.set(0,90,0);
-mug.hand = false;
-scene.getObjectByName("Water").material.visible = false;
-
-sky = scene.getObjectByName("Sky");
-sky.look = false;
-loaded = true;
-}, 500);
-
+init.initialization();
 
 // Light!
 light.standardLight(scene);
