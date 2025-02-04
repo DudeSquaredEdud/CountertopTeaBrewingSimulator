@@ -9,11 +9,22 @@ import * as main from "./main.js";
 
 var sip = new Audio('sounds/sip.mp3');
 var slurp = new Audio('sounds/slurp.mp3');
+var shrimp = new Audio('sounds/shrimp.mp3');
+
+shrimp.isPlaying = false;
 
 export function click_interact(object){
     let mug = main.scene.getObjectByName("mug_model");
     let water = main.scene.getObjectByName("Water");
     switch(object.name){
+        case "Shrimp_1":
+        case "Guitar":
+            if (!shrimp.isPlaying) shrimp.play();
+            else {
+                shrimp.pause();
+                shrimp.currentTime = 0;
+            }
+            break;
         // THE MUG
         case "Water":
         case "Mug":
@@ -78,8 +89,6 @@ document.addEventListener('keyup',  (e) => {
     button_interact(e, true)
 });
 
-var slurp_time = false;
-
 slurp.onended = () => {
     let water = main.scene.getObjectByName("Water");
     slurp.pause();
@@ -100,6 +109,6 @@ function drink(e, up){
         sip.play();
         slurp.onended();
         // Display how many tea points that was.
+        }
     }
-}
 }
