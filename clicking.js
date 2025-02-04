@@ -23,7 +23,7 @@ function raycastIntersect(event){
 }
 
 // Function to handle mouse clicks
-function onLeftMouseClick(event) {
+function onRightMouseClick(event) {
     const intersects = raycastIntersect(event)
 
     // Check if any objects were clicked
@@ -35,24 +35,24 @@ function onLeftMouseClick(event) {
     }
 }
 
-document.addEventListener('click', onLeftMouseClick, false);
 
 
 // Function to handle mouse clicks
-function onRightMouseClick(event) {
+function onLeftMouseClick(event) {
     event.preventDefault();
     const intersects = raycastIntersect(event);
-
+    
     // Check if any objects were clicked
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
         console.log('Right Clicked object:', clickedObject.name || clickedObject.uuid);
-
+        
         interact.click_interact(clickedObject);
     }
-
+    
 }
 document.addEventListener('contextmenu', onRightMouseClick, false);
+document.addEventListener('click', onLeftMouseClick, false);
 
 // Custom function to handle object clicks
 function pingObject(object) {

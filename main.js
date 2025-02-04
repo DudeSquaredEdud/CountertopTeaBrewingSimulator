@@ -14,6 +14,8 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+alert("Note! Buttons were recently swapped: left click now does what right click used to do, and vice versa.");
+
 init.initialization();
 
 // Light!
