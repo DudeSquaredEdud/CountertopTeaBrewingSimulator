@@ -3,6 +3,7 @@ import * as init from "./initializations.js";
 import * as cam from './camera.js';
 import * as light from './lights.js';
 import * as click from './clicking.js';
+import * as interact from './interact.js';
 
 export let loaded = false;
 export const scene = new THREE.Scene();

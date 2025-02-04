@@ -12,14 +12,21 @@ var slurp = new Audio('sounds/slurp.mp3');
 var shrimp = new Audio('sounds/shrimp.mp3');
 
 shrimp.isPlaying = false;
+shrimp.onended = () => {
+    shrimp.pause();
+    shrimp.currentTime = 0;
+};
 
 export function click_interact(object){
     let mug = main.scene.getObjectByName("mug_model");
     let water = main.scene.getObjectByName("Water");
     switch(object.name){
         case "Shrimp_1":
-        case "Guitar":
-            if (!shrimp.isPlaying) shrimp.play();
+        case "Guitar_2":
+            if (!shrimp.isPlaying) {
+                shrimp.play();
+                shrimp.isPlaying = true;
+            }
             else {
                 shrimp.pause();
                 shrimp.currentTime = 0;
