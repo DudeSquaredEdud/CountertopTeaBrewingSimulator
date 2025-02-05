@@ -77,6 +77,10 @@ export function click_interact(object){
                 water.material.color.b -= 0.1;
             }
         break;
+        case "Paper":
+        case "Paper_2":
+            document.getElementById("info_screen").style.display = "unset";
+        break;
     }
 
 }
@@ -96,6 +100,11 @@ document.addEventListener('keyup',  (e) => {
     button_interact(e, true)
 });
 
+
+document.getElementById("info_screen").onclick = () => {
+    document.getElementById("info_screen").style.display = "none";
+};
+
 slurp.onended = () => {
     let water = main.scene.getObjectByName("Water");
     slurp.pause();
@@ -109,6 +118,7 @@ slurp.onended = () => {
 function drink(e, up){
     let water = main.scene.getObjectByName("Water");
     if (water.material.visible){
+        // TODO: Rotate the mug towards the player's face.
         if (!up){
             slurp.play();
         }
