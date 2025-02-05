@@ -4,6 +4,7 @@ import * as cam from './camera.js';
 import * as light from './lights.js';
 import * as click from './clicking.js';
 import * as interact from './interact.js';
+import * as loading from './loadingScreen.js';
 
 export let loaded = false;
 export const scene = new THREE.Scene();
@@ -14,8 +15,7 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-alert("Note! Buttons were recently swapped: left click now does what right click used to do, and vice versa.");
-
+loading.loading_quote();
 init.initialization();
 
 // Light!

@@ -26,5 +26,6 @@ export function initialization(){
 
     sky = main.scene.getObjectByName("Sky");
     sky.look = false;
-    }, 200);
+    document.getElementById("LoadingScreen").style.display = "none";
+    }, 500);
 }
