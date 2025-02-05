@@ -24,6 +24,7 @@ function raycastIntersect(event){
 
 // Function to handle mouse clicks
 function onRightMouseClick(event) {
+    event.preventDefault();
     const intersects = raycastIntersect(event)
 
     // Check if any objects were clicked
@@ -39,7 +40,6 @@ function onRightMouseClick(event) {
 
 // Function to handle mouse clicks
 function onLeftMouseClick(event) {
-    event.preventDefault();
     const intersects = raycastIntersect(event);
     
     // Check if any objects were clicked
