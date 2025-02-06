@@ -6,72 +6,101 @@
             }
           }
         </script>
+        <style>
+          #tooltip {
+            position: absolute; 
+            display: none;
+            background-color: black; 
+            font-family:monospace;
+            font-size:medium; 
+            color:aliceblue;
+            height: fit-content;
+            min-height: 20px;
+            border-radius: 10px;
+            border: solid 5px rgba(0, 0, 0, 0.589);
+            padding: 10px;
+            padding-bottom: 3px;
+            width: fit-content;
+          }
+
+          #LoadingScreen {
+            position: absolute; 
+            background-color: black; 
+            font-family:monospace;
+            font-size: xx-large; 
+            text-align: center;
+            padding-top: 10%;
+            color:aliceblue;
+            height: 100%; 
+            width: 100%;
+          }
+
+          #info_screen {
+            background-color: rgba(0, 0, 0, 0.7); 
+            font-family:monospace;
+            font-size: xx-large; 
+            text-align: center;
+            padding: 5%;
+            color:aliceblue;
+            height: 50%; 
+            width: 50%;
+            display: none;
+            border-radius: 10px;
+            border: solid 10px rgba(0, 0, 0, 0.589);
+            margin-inline: auto;
+            position: fixed;
+            inset: 0px;
+            margin: auto;
+          }
+
+          .turn {
+            background-color: rgba(0, 0, 0, 0.001); 
+            font-family:monospace;
+            text-align: center;
+            color:aliceblue;
+            height: 100%; 
+            width: 5vw;
+            margin-top: auto;
+            margin-bottom: auto;
+            position: fixed;
+            inset: 0px;
+            z-index: 1000;
+            transition: 0.3s;
+            opacity: 0%;
+          }
+          *.turn.left:hover{
+            opacity: 80%;
+          }
+          *.turn.right:hover{
+            opacity: 80%;
+          }
+
+          .turn.left{
+            margin-right: auto;
+            background: linear-gradient(to right, #585858, #d4d4d400);
+          }
+
+          .turn.right{
+            margin-left: auto;
+            background: linear-gradient(to left, #585858, #d4d4d400);
+          }
+
+
+        </style>
 <link rel="shortcut icon" href="CtTBSLogo.ico" type="image/x-icon">
 <body style="margin: 0px;">
-    <div id="tooltip" style="
-    position: absolute; 
-    display: none;
-    background-color: black; 
-    font-family:monospace;
-    font-size:medium; 
-    color:aliceblue;
-    height: fit-content;
-    min-height: 20px;
-    border-radius: 10px;
-    border: solid 5px rgba(0, 0, 0, 0.589);
-    padding: 10px;
-    padding-bottom: 3px;
-    width: fit-content;">
+    <div id="tooltip" >
     </div>
-    <div id="LoadingScreen" style="
-      position: absolute; 
-      background-color: black; 
-      font-family:monospace;
-      font-size: xx-large; 
-      text-align: center;
-      padding-top: 10%;
-      color:aliceblue;
-      height: 100%; 
-      width: 100%;"> 
+
+    <div id="LoadingScreen"> 
       <p id="loading_text" style="display: none">Loading</p> 
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br><br><br>
       <p id="LoadingQuote"></p>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br><br><br><br><br><br><br>
       <p id="ashton" style="display: none">Made by Ashton Andrepont</p>
     </div>
-    <div id="info_screen" 
-    style="
-      background-color: rgba(0, 0, 0, 0.7); 
-      font-family:monospace;
-      font-size: xx-large; 
-      text-align: center;
-      padding: 5%;
-      color:aliceblue;
-      height: 50%; 
-      width: 50%;
-      display: none;
-      border-radius: 10px;
-      border: solid 10px rgba(0, 0, 0, 0.589);
-      margin-inline: auto;
-      position: fixed;
-      inset: 0px;
-      margin: auto;
-      "
-      >
+
+    <div id="info_screen">
       <h1>Countertop Tea Brewing Simulator</h1>
       <h2>By Ashton Andrepont</h2>
       <p>Left click to interact with stuff.</p>
@@ -79,6 +108,11 @@
       <p>Space to sip, hold to slurp.</p>
       <p>Still in baby version.</p>
       <p>Fill the mug with lake water and add some random tree leaves to make tea.</p>
+    </div>    
+    <div id="left_turn" class="turn left"
+    >  
     </div>
+    <div id="right_turn" class="turn right"
+    >
     <script src="main.js" type="module"></script>
 </body>

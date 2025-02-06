@@ -36,7 +36,7 @@ document.addEventListener('mousemove', onDocumentMouseMove, false);
 function onDocumentMouseMove(event) {
     event.preventDefault();
     mouse.x = (-(event.clientX / window.innerWidth)+.5)/3;
-    mouse.y = -0.2+(-(event.clientY / window.innerHeight))/10;
+    mouse.y = (-(event.clientY / window.innerHeight)+.5)/3;
     document.getElementById("tooltip").style.left = (event.clientX + 10)+"px";
     document.getElementById("tooltip").style.top = (event.clientY + 5)+"px";
     const intersects = click.raycastIntersect(event);
@@ -52,12 +52,15 @@ function onDocumentMouseMove(event) {
     else document.getElementById("tooltip").style.display = "none";
 }
 
+export let raise_head = -.2, turn_head = 0;
+
 // Update the camera based on the mouse position
 export function updateCamera() {
     // Adjust the camera's position based on the mouse's position
     // For some reason, these are swapped?
-    main.camera.rotation.y =  THREE.MathUtils.lerp(main.camera.rotation.y, mouse.x, .07);
-    main.camera.rotation.x =  THREE.MathUtils.lerp(main.camera.rotation.x, mouse.y, .1); 
+    main.camera.rotation.y =  THREE.MathUtils.lerp(main.camera.rotation.y, mouse.x + turn_head, .07);
+    main.camera.rotation.x =  THREE.MathUtils.lerp(main.camera.rotation.x, mouse.y + raise_head*Math.sin((main.camera.rotation.y)*.5)*0.25 , .1);
+    // TODO: Generalize this to any object that can be picked up.
     if (main.loaded){
         if (main.mug.hand){
             // main.mug.position.y =  mouse.x;
@@ -67,3 +70,13 @@ export function updateCamera() {
         }
     }
 }
+
+// Radians...
+function turnLeft(event){
+    turn_head += 0.785398;
+}
+function turnRight(event){
+    turn_head -= 0.785398;
+}
+document.getElementById("left_turn").addEventListener("click", turnLeft);
+document.getElementById("right_turn").addEventListener("click", turnRight);

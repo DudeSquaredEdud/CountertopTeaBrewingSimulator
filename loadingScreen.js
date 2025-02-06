@@ -52,12 +52,11 @@ export function loading_quote(){
 
     ]
 
-    if (date.getDate == 5 && date.getMonth == 12){
+    if (date.getDate() == 5 && date.getMonth() == 11){
         document.getElementById("LoadingQuote").innerText = "It's my birthday!";
     }
     else{
-        let choice = (Math.random() * quote_list.length).toFixed(0);
-        console.log(choice, quote_list.length);
+        let choice = Math.floor(Math.random() * quote_list.length);
         document.getElementById("LoadingQuote").innerText = quote_list[choice];
         document.getElementById("loading_text").style.display = "unset";
         document.getElementById("ashton").style.display = "unset";

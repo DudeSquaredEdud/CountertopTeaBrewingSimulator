@@ -26,5 +26,5 @@ cam.neutralPos(true);
 
 renderer.setAnimationLoop(() => {
 renderer.render(scene, camera);
-cam.updateCamera(camera);
+cam.updateCamera();
 });

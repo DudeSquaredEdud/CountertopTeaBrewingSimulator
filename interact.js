@@ -45,18 +45,18 @@ export function click_interact(object){
             }
         break;
         // THE SKY
-        case "Sky":
-            if(!object.look){
-                cam.windowPos();
-                if (mug.hand) cam.windowPos(mug,[0,-2,-3]);
-                object.look = true;
-            }
-            else {
-                cam.neutralPos();
-                if (mug.hand) cam.neutralPos(false, mug, [0,-2.5,-3]);
-                object.look = false;
-            }
-        break;
+        // case "Sky":
+        //     if(!object.look){
+        //         cam.windowPos();
+        //         if (mug.hand) cam.windowPos(mug,[0,-2,-3]);
+        //         object.look = true;
+        //     }
+        //     else {
+        //         cam.neutralPos();
+        //         if (mug.hand) cam.neutralPos(false, mug, [0,-2.5,-3]);
+        //         object.look = false;
+        //     }
+        // break;
         // THE LAKE
         case "Lake":
             if (mug.hand){
