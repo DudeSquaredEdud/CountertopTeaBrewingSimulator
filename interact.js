@@ -35,6 +35,8 @@ export function click_interact(object){
         // THE MUG
         case "Water":
         case "Mug":
+            // TODO: Make mug holdable.
+            // TODO: Holdable class.
             if (!mug.hand) {
                 mug.position.set(0,4,3);
                 mug.hand = true;

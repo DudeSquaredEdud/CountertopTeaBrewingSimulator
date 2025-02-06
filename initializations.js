@@ -15,6 +15,13 @@ function childTooltip(thing, tooltip){
     });
 }
 
+function childProp(thing, prop, value){
+    thing[prop] = value;
+    thing.children.forEach(child => {
+        child[prop] = value;
+    });
+};
+
 export function initialization_Countertop(){
     // Add the countertop to the scene.
     init("CV_Room", 'meshes/CV_Room.glb', (thing) => {
@@ -46,6 +53,7 @@ export function initialization_Countertop(){
         thing.hand = false;
         thing.getObjectByName("Water").material.visible = false;
         childTooltip(thing, "Mug");
+        childProp(thing, "hand", false);
     });
 
     setTimeout(() => {

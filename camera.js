@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import * as main from './main.js';
-import * as click from "./clicking.js"
+import * as click from "./clicking.js";
 
 // Mouse Position vector
 var mouse = new THREE.Vector2();
@@ -36,7 +36,7 @@ document.addEventListener('mousemove', onDocumentMouseMove, false);
 function onDocumentMouseMove(event) {
     event.preventDefault();
     mouse.x = (-(event.clientX / window.innerWidth)+.5)/3;
-    mouse.y = (-(event.clientY / window.innerHeight)+.5)/3;
+    mouse.y = (-(event.clientY / window.innerHeight)+.5)/2;
     document.getElementById("tooltip").style.left = (event.clientX + 10)+"px";
     document.getElementById("tooltip").style.top = (event.clientY + 5)+"px";
     const intersects = click.raycastIntersect(event);
@@ -52,22 +52,25 @@ function onDocumentMouseMove(event) {
     else document.getElementById("tooltip").style.display = "none";
 }
 
-export let raise_head = -.2, turn_head = 0;
+export let raise_head = -.1, turn_head = 0;
 
 // Update the camera based on the mouse position
 export function updateCamera() {
-    // Adjust the camera's position based on the mouse's position
-    // For some reason, these are swapped?
-    main.camera.rotation.y =  THREE.MathUtils.lerp(main.camera.rotation.y, mouse.x + turn_head, .07);
-    main.camera.rotation.x =  THREE.MathUtils.lerp(main.camera.rotation.x, mouse.y + raise_head*Math.sin((main.camera.rotation.y)*.5)*0.25 , .1);
-    // TODO: Generalize this to any object that can be picked up.
-    if (main.loaded){
-        if (main.mug.hand){
-            // main.mug.position.y =  mouse.x;
-            main.mug.position.x = -mouse.x*1.3; 
-            main.mug.rotation.y = mouse.x*0.8+90;
+    const targetQuaternion = new THREE.Quaternion();
+    const targetEuler = new THREE.Euler(
+        Math.sin(mouse.y) + raise_head,
+        mouse.x + turn_head,
+        0,
+        'YXZ'
+    );
     
-        }
+    targetQuaternion.setFromEuler(targetEuler);
+    main.camera.quaternion.slerp(targetQuaternion, 0.1);
+    
+    let mug = main.scene.getObjectByName("Mug");
+    if (mug?.hand) {
+        mug.position.x = main.camera.rotation.y*10;
+        mug.rotation.y = mouse.x * 0.8 + 90;
     }
 }
 

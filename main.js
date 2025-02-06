@@ -20,6 +20,15 @@ init.initialization_Countertop();
 
 // Light!
 light.standardLight(scene);
+// light.ambientOnly(scene);
+
+
+const up = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("skybox/sk_top.png"), side: THREE.BackSide });
+const sd = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("skybox/sk_side.png"), side: THREE.BackSide });
+const dn = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("skybox/sk_bottom.png"), side: THREE.BackSide });
+let skyboxGeo = new THREE.BoxGeometry(1000, 1000, 1000);
+let skybox = new THREE.Mesh(skyboxGeo, [sd,sd,up,dn,sd,sd]);
+scene.add(skybox)
 
 // set the camera to normal mode
 cam.neutralPos(true);
