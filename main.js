@@ -16,7 +16,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 loading.loading_quote();
-init.initialization();
+init.initialization_Countertop();
 
 // Light!
 light.standardLight(scene);

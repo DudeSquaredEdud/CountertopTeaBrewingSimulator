@@ -3,6 +3,7 @@
  */
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// import * as main from "./main.js";
 
 function dumpObject(obj, lines = [], isLast = true, prefix = '') {
     const localPrefix = isLast ? '└─' : '├─';
@@ -16,7 +17,6 @@ function dumpObject(obj, lines = [], isLast = true, prefix = '') {
     return lines;
   }
 
-export var object;
 export function quickLoad(scene, name, path, dump = true) {
     const loader = new GLTFLoader(); 
     loader.load( path, 
@@ -30,5 +30,4 @@ export function quickLoad(scene, name, path, dump = true) {
             console.error( error );
 
         });
-
 };

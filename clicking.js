@@ -11,7 +11,7 @@ const raycaster = new THREE.Raycaster();
 const rayMouse = new THREE.Vector2();
 
 
-function raycastIntersect(event){
+export function raycastIntersect(event){
     rayMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     rayMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -28,14 +28,20 @@ function onRightMouseClick(event) {
     const intersects = raycastIntersect(event)
 
     // Check if any objects were clicked
-    if (intersects.length > 0 && event.ctrlKey) {
+    if (intersects.length > 0) {
+        // If control was held
         const clickedObject = intersects[0].object;
-        console.log('Left clicked object:', clickedObject.name || clickedObject.uuid, clickedObject, clickedObject.material);
-
-        pingObject(clickedObject);
+        if(event.ctrlKey){
+            console.log('Right clicked object:', clickedObject.name || clickedObject.uuid, clickedObject, clickedObject.material);
+            pingObject(clickedObject);
+        }
+        else{
+            if(clickedObject.rightClick){
+                clickedObject.rightClick();
+            }
+        }
     }
 }
-
 
 
 // Function to handle mouse clicks
@@ -45,12 +51,12 @@ function onLeftMouseClick(event) {
     // Check if any objects were clicked
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
-        console.log('Right Clicked object:', clickedObject.name || clickedObject.uuid);
+        console.log('Left Clicked object:', clickedObject.name || clickedObject.uuid);
         
         interact.click_interact(clickedObject);
     }
-    
 }
+
 document.addEventListener('contextmenu', onRightMouseClick, false);
 document.addEventListener('click', onLeftMouseClick, false);
 

@@ -81,6 +81,8 @@ export function click_interact(object){
         case "Paper_2":
             document.getElementById("info_screen").style.display = "unset";
         break;
+        case "CV_Paper":
+            cam.CVPos();
     }
 
 }
