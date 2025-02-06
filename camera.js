@@ -31,8 +31,6 @@ export function CVPos(object = main.camera, offset = [0,0,0]){
     );
 }
 
-
-
 // Move the camera with the mouse a little bit
 document.addEventListener('mousemove', onDocumentMouseMove, false);
 function onDocumentMouseMove(event) {
@@ -42,15 +40,14 @@ function onDocumentMouseMove(event) {
     document.getElementById("tooltip").style.left = (event.clientX + 10)+"px";
     document.getElementById("tooltip").style.top = (event.clientY + 5)+"px";
     const intersects = click.raycastIntersect(event);
-    if (event.ctrlKey){
-        if (intersects.length > 0) {
-            const clickedObject = intersects[0].object;
-            if(clickedObject.tooltip){
-                document.getElementById("tooltip").textContent = clickedObject.tooltip;
-                document.getElementById("tooltip").style.display = "unset";
-            }
-            else document.getElementById("tooltip").style.display = "none";
+    if (intersects.length > 0) {
+        // Either that object or the one behind it
+        const focusedObject = intersects[0].object;
+        if(focusedObject.tooltip){
+            document.getElementById("tooltip").textContent = focusedObject.tooltip;
+            document.getElementById("tooltip").style.display = "unset";
         }
+        else document.getElementById("tooltip").style.display = "none";
     }
     else document.getElementById("tooltip").style.display = "none";
 }
@@ -59,8 +56,8 @@ function onDocumentMouseMove(event) {
 export function updateCamera() {
     // Adjust the camera's position based on the mouse's position
     // For some reason, these are swapped?
-    main.camera.rotation.y =  main.camera.rotation.y - (main.camera.rotation.y-mouse.x)*.07;
-    main.camera.rotation.x =  main.camera.rotation.x - (main.camera.rotation.x-mouse.y)*.1; 
+    main.camera.rotation.y =  THREE.MathUtils.lerp(main.camera.rotation.y, mouse.x, .07);
+    main.camera.rotation.x =  THREE.MathUtils.lerp(main.camera.rotation.x, mouse.y, .1); 
     if (main.loaded){
         if (main.mug.hand){
             // main.mug.position.y =  mouse.x;
