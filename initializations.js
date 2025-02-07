@@ -34,7 +34,6 @@ export function initialization_Countertop(){
         thing.scale.set(.1,.1,.1);
         childTooltip(thing, "Shrimp");
     });
-    init("backWall_model", 'meshes/backWall.glb');
     init("wallsAndFloor_model", 'meshes/wallsAndFloor.glb');
     init("countertop_model", 'meshes/countertop.glb');
     init("paper_model", 'meshes/paber.glb', (thing) => {

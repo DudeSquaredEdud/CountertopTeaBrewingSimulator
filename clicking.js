@@ -21,6 +21,13 @@ export function raycastIntersect(event){
     // Find intersected objects
     return raycaster.intersectObjects(main.scene.children, true);
 }
+let center = new THREE.Vector2(0,-1);
+export function raycastIntersectFromCenter(event){
+    // Update the raycaster with the camera and mouse position
+    raycaster.setFromCamera(center, main.camera);
+    // Find intersected objects
+    return raycaster.intersectObjects(main.scene.children, true);
+}
 
 // Function to handle mouse clicks
 function onRightMouseClick(event) {

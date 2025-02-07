@@ -34,6 +34,6 @@ scene.add(skybox)
 cam.neutralPos(true);
 
 renderer.setAnimationLoop(() => {
-renderer.render(scene, camera);
-cam.updateCamera();
+    renderer.render(scene, camera);
+    cam.updateCamera();
 });

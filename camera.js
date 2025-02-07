@@ -36,14 +36,14 @@ document.addEventListener('mousemove', onDocumentMouseMove, false);
 function onDocumentMouseMove(event) {
     event.preventDefault();
     mouse.x = (-(event.clientX / window.innerWidth)+.5)/3;
-    mouse.y = (-(event.clientY / window.innerHeight)+.5)/2;
+    mouse.y = (-(event.clientY / window.innerHeight)+.5)/4;
     document.getElementById("tooltip").style.left = (event.clientX + 10)+"px";
     document.getElementById("tooltip").style.top = (event.clientY + 5)+"px";
     const intersects = click.raycastIntersect(event);
     if (intersects.length > 0) {
         // Either that object or the one behind it
         const focusedObject = intersects[0].object;
-        if(focusedObject.tooltip){
+        if(intersects[0].distance < 20 && focusedObject.tooltip){
             document.getElementById("tooltip").textContent = focusedObject.tooltip;
             document.getElementById("tooltip").style.display = "unset";
         }
@@ -53,6 +53,8 @@ function onDocumentMouseMove(event) {
 }
 
 export let raise_head = -.1, turn_head = 0;
+
+const target_vec = new THREE.Vector3(0, 6, 5);
 
 // Update the camera based on the mouse position
 export function updateCamera() {
@@ -64,6 +66,7 @@ export function updateCamera() {
         'YXZ'
     );
     
+    main.camera.position.lerp(target_vec, .1);
     targetQuaternion.setFromEuler(targetEuler);
     main.camera.quaternion.slerp(targetQuaternion, 0.1);
     
@@ -76,10 +79,43 @@ export function updateCamera() {
 
 // Radians...
 function turnLeft(event){
-    turn_head += 0.785398;
+    turn_head += 1.57079632679;
 }
 function turnRight(event){
-    turn_head -= 0.785398;
+    turn_head -= 1.57079632679;
 }
 document.getElementById("left_turn").addEventListener("click", turnLeft);
 document.getElementById("right_turn").addEventListener("click", turnRight);
+
+
+let intervalId = null;
+
+function clickAndHoldStart(event) {
+    intervalId = setInterval(function() {
+        goForward(event);
+        console.log('Holding...');
+    }, 100);
+}
+
+function clickAndHoldStop(event) {
+    clearInterval(intervalId);
+    intervalId = null;
+}
+
+// Attach the event listeners to the element
+document.getElementById("goForward").addEventListener('mousedown', clickAndHoldStart);
+document.getElementById("goForward").addEventListener('mouseup', clickAndHoldStop);
+document.getElementById("goForward").addEventListener('mouseout', clickAndHoldStop);
+
+
+function goForward(event){
+
+    const intersects = click.raycastIntersectFromCenter(event);
+    // console.log(main.camera.rotation);
+    if (intersects[0]?.distance > 7){
+            const prevpos = main.camera.position;
+            target_vec.set(-3*Math.round(Math.sin(turn_head)) + prevpos.x,
+                0 + prevpos.y,
+                -3*Math.round(Math.cos(turn_head)) + prevpos.z);
+    }
+}

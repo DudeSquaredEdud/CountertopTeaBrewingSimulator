@@ -85,6 +85,27 @@
             background: linear-gradient(to left, #333535, #d4d4d400);
           }
 
+          .forward{
+            background-color: rgba(0, 0, 0, 0.001); 
+            font-family:monospace;
+            text-align: center;
+            color:aliceblue;
+            height: 5vw; 
+            width: 50%;
+            margin-bottom: auto;
+            margin-left: auto;
+            margin-right: auto;
+            position: fixed;
+            inset: 0px;
+            z-index: 1000;
+            transition: 0.3s;
+            opacity: 0%;
+            background: linear-gradient(to bottom, #333535, #d4d4d400);
+          }
+          .forward:hover{
+            opacity: 80%;
+          }
+
 
         </style>
 <link rel="shortcut icon" href="CtTBSLogo.ico" type="image/x-icon">
@@ -113,6 +134,8 @@
     >  
     </div>
     <div id="right_turn" class="turn right"
-    >
+    ></div>
+    <div id="goForward" class="forward"
+    ></div>
     <script src="main.js" type="module"></script>
 </body>
