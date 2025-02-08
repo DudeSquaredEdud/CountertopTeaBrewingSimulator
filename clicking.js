@@ -7,21 +7,11 @@ import * as THREE from 'three';
 import * as main from "./main.js";
 import * as interact from "./interact.js";
 
-const raycaster = new THREE.Raycaster();
-const rayMouse = new THREE.Vector2();
+export const raycaster = new THREE.Raycaster();
 
 
-export function raycastIntersect(event){
-    rayMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    rayMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    // Update the raycaster with the camera and mouse position
-    raycaster.setFromCamera(rayMouse, main.camera);
-
-    // Find intersected objects
-    return raycaster.intersectObjects(main.scene.children, true);
-}
-let center = new THREE.Vector2(0,-1);
+let center = new THREE.Vector2(0,0);
 export function raycastIntersectFromCenter(event){
     // Update the raycaster with the camera and mouse position
     raycaster.setFromCamera(center, main.camera);
@@ -29,17 +19,32 @@ export function raycastIntersectFromCenter(event){
     return raycaster.intersectObjects(main.scene.children, true);
 }
 
+let waistHeight = new THREE.Vector3(0,-4,0);
+let waistRot = new THREE.Vector3(0,-1,0);
+let waist_cam;
+
+export function raycastIntersectFromWaist(event){
+    // Update the raycaster with the camera and mouse position
+    waist_cam = main.camera.clone();
+    waist_cam.position.add(waistHeight);
+    waist_cam.rotation.y += waistRot;
+
+    raycaster.setFromCamera(center, waist_cam);
+    // Find intersected objects
+    return raycaster.intersectObjects(main.scene.children, true);
+}
+
 // Function to handle mouse clicks
 function onRightMouseClick(event) {
     event.preventDefault();
-    const intersects = raycastIntersect(event)
+    const intersects = raycastIntersectFromCenter(event)
 
     // Check if any objects were clicked
     if (intersects.length > 0) {
         // If control was held
-        const clickedObject = intersects[0].object;
-        if(event.ctrlKey){
-            console.log('Right clicked object:', clickedObject.name || clickedObject.uuid, clickedObject, clickedObject.material);
+        const clickedObject = intersects[0];
+        if(event.shiftKey){
+            console.log('Right clicked object:', clickedObject);
             pingObject(clickedObject);
         }
         else{
@@ -50,10 +55,9 @@ function onRightMouseClick(event) {
     }
 }
 
-
 // Function to handle mouse clicks
 function onLeftMouseClick(event) {
-    const intersects = raycastIntersect(event);
+    const intersects = raycastIntersectFromCenter(event);
     
     // Check if any objects were clicked
     if (intersects.length > 0) {
@@ -64,11 +68,28 @@ function onLeftMouseClick(event) {
     }
 }
 
-document.addEventListener('contextmenu', onRightMouseClick, false);
-document.addEventListener('click', onLeftMouseClick, false);
+function onMouseDown(e)
+{
+    if (e.button === 0)
+    {
+        onLeftMouseClick(e)
+    }
+
+    if (e.button === 2)
+    {
+        onRightMouseClick(e)
+    }
+
+}
+
+window.addEventListener('mousedown', onMouseDown);
+document.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
+
+
+
 
 // Custom function to handle object clicks
-function pingObject(object) {
+export function pingObject(object) {
     let pingValue = 1.2;
         object.material.color.r *= pingValue;
         object.material.color.g *= pingValue;

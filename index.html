@@ -53,60 +53,18 @@
             margin: auto;
           }
 
-          .turn {
-            background-color: rgba(0, 0, 0, 0.001); 
-            font-family:monospace;
+          #crosshair{
+            /* The shit it takes to center an object... */
+            position: fixed; 
+            margin: auto;
             text-align: center;
-            color:aliceblue;
-            height: 100%; 
-            width: 5vw;
-            margin-top: auto;
-            margin-bottom: auto;
-            position: fixed;
-            inset: 0px;
-            z-index: 1000;
-            transition: 0.3s;
-            opacity: 0%;
+            margin-inline: auto;
+            top: 50%;
+            left: 50%;
+            mix-blend-mode: difference;
+            font-size: large;
+            color:rgb(255, 255, 255);
           }
-          *.turn.left:hover{
-            opacity: 80%;
-          }
-          *.turn.right:hover{
-            opacity: 80%;
-          }
-
-          .turn.left{
-            margin-right: auto;
-            background: linear-gradient(to right, #333535, #d4d4d400);
-          }
-
-          .turn.right{
-            margin-left: auto;
-            background: linear-gradient(to left, #333535, #d4d4d400);
-          }
-
-          .forward{
-            background-color: rgba(0, 0, 0, 0.001); 
-            font-family:monospace;
-            text-align: center;
-            color:aliceblue;
-            height: 5vw; 
-            width: 50%;
-            margin-bottom: auto;
-            margin-left: auto;
-            margin-right: auto;
-            position: fixed;
-            inset: 0px;
-            z-index: 1000;
-            transition: 0.3s;
-            opacity: 0%;
-            background: linear-gradient(to bottom, #333535, #d4d4d400);
-          }
-          .forward:hover{
-            opacity: 80%;
-          }
-
-
         </style>
 <link rel="shortcut icon" href="CtTBSLogo.ico" type="image/x-icon">
 <body style="margin: 0px;">
@@ -130,12 +88,6 @@
       <p>Still in baby version.</p>
       <p>Fill the mug with lake water and add some random tree leaves to make tea.</p>
     </div>    
-    <div id="left_turn" class="turn left"
-    >  
-    </div>
-    <div id="right_turn" class="turn right"
-    ></div>
-    <div id="goForward" class="forward"
-    ></div>
+    <div id="crosshair">⨁</div>
     <script src="main.js" type="module"></script>
 </body>

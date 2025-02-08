@@ -10,8 +10,9 @@ function init(name, path, load = () => {}){
 
 function childTooltip(thing, tooltip){
     thing.tooltip = tooltip;
-    thing.children.forEach(child => {
+    if (thing.children)thing.children.forEach(child => {
         child.tooltip = tooltip;
+        childTooltip(child, tooltip);
     });
 }
 
@@ -22,20 +23,39 @@ function childProp(thing, prop, value){
     });
 };
 
+function childProps(thing, props){
+    Object.assign(thing, props)
+    thing.children.forEach(child => {
+        childProps(child, props);
+    });
+};
+
 export function initialization_Countertop(){
     // Add the countertop to the scene.
     init("CV_Room", 'meshes/CV_Room.glb', (thing) => {
         thing.position.set(0,-50,0);
     });
-    init("outside_model", 'meshes/outside.glb');
+    init("outside_model", 'meshes/outside.glb', (thing) => {
+        childProps(thing, {
+            isWall: true
+        })
+    });
     init("shrimp_model", 'meshes/shrimp.glb', (thing) =>{
         thing.position.set(10,0,-35);
         thing.rotation.set(0,-45,0);
         thing.scale.set(.1,.1,.1);
         childTooltip(thing, "Shrimp");
     });
-    init("wallsAndFloor_model", 'meshes/wallsAndFloor.glb');
-    init("countertop_model", 'meshes/countertop.glb');
+    init("wallsAndFloor_model", 'meshes/wallsAndFloor.glb', (thing) => {
+        childProps(thing, {
+            isWall: true
+        })
+    });
+    init("countertop_model", 'meshes/countertop.glb', (thing) => {
+        childProps(thing, {
+            isWall: true
+        })
+    });
     init("paper_model", 'meshes/paber.glb', (thing) => {
         thing.position.set(-2.3,.8,-2);
         childTooltip(thing, "Game Info");
