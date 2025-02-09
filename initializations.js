@@ -1,5 +1,6 @@
 import * as main from './main.js';
 import * as model from './modelLoading.js';
+import * as THREE from 'three';
 
 function init(name, path, load = () => {}){
     model.quickLoad(main.scene, name, path, false);
@@ -23,10 +24,17 @@ function childProp(thing, prop, value){
     });
 };
 
-function childProps(thing, props){
+function childPropButBetter(thing, props){
     Object.assign(thing, props)
     thing.children.forEach(child => {
-        childProps(child, props);
+        // Object.assign(child, props)
+    });
+};
+
+function childPropsRecursive(thing, props){
+    Object.assign(thing, props)
+    thing.children.forEach(child => {
+        childPropsRecursive(child, props);
     });
 };
 
@@ -36,23 +44,30 @@ export function initialization_Countertop(){
         thing.position.set(0,-50,0);
     });
     init("outside_model", 'meshes/outside.glb', (thing) => {
-        childProps(thing, {
+        childPropsRecursive(thing, {
             isWall: true
         })
+        childPropsRecursive(thing.getObjectByName("Grass"), { isGround: true });
+        childPropsRecursive(thing.getObjectByName("Road"), { isGround: true });
     });
     init("shrimp_model", 'meshes/shrimp.glb', (thing) =>{
         thing.position.set(10,0,-35);
         thing.rotation.set(0,-45,0);
         thing.scale.set(.1,.1,.1);
         childTooltip(thing, "Shrimp");
+        model.actions['ShrimpAction'].setLoop(THREE.LoopOnce);
+        model.actions['GuitarAction'].setLoop(THREE.LoopOnce);
     });
     init("wallsAndFloor_model", 'meshes/wallsAndFloor.glb', (thing) => {
-        childProps(thing, {
+        childPropsRecursive(thing, {
             isWall: true
         })
+        model.actions['DoorOpen'].setLoop(THREE.LoopPingPong, 2);
+
+        childPropsRecursive(thing.getObjectByName("Bed"), { isGround: true });
     });
     init("countertop_model", 'meshes/countertop.glb', (thing) => {
-        childProps(thing, {
+        childPropsRecursive(thing, {
             isWall: true
         })
     });
@@ -74,10 +89,26 @@ export function initialization_Countertop(){
         childTooltip(thing, "Mug");
         childProp(thing, "hand", false);
     });
+    init("magnafier_model", "meshes/magnafier.glb");
+    init("DemonLadyNoRig_model", "meshes/DemonLadyNoRig.glb", (thing) => {
+        thing.position.set(100,0,-16);
+        thing.rotation.set(0,-1.52,0);
+        console.log(model.actions);
+        model.actions['DemonYeah'].setLoop(THREE.LoopRepeat, 100);
+        model.actions['DemonYeah'].reset().play()
+    });
+    init("demonhouse_model", "meshes/demonhouse.glb", (thing) => {
+        childPropsRecursive(thing, {
+            isWall: true
+        })
+        thing.position.set(100,0,-8);
+        thing.rotation.set(0,-3.1415,0);
+        model.actions['DemonDoorOpen'].setLoop(THREE.LoopPingPong, 2);
+    });
 
     setTimeout(() => {
+    main.camera.setFocalLength(18);
     document.getElementById("LoadingScreen").style.display = "none";
     }, 500);
 }
-
 

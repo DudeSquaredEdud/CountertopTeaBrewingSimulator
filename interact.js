@@ -6,6 +6,7 @@
 // import * as THREE from 'three';
 import * as cam from "./camera.js";
 import * as main from "./main.js";
+import * as model from './modelLoading.js';
 
 var sip = new Audio('sounds/sip.mp3');
 var slurp = new Audio('sounds/slurp.mp3');
@@ -21,6 +22,14 @@ export function click_interact(object){
     let mug = main.scene.getObjectByName("mug_model");
     let water = main.scene.getObjectByName("Water");
     switch(object.name){
+        case "DemonDoor_1":
+        case "DemonDoor_3":
+            model.actions['DemonDoorOpen'].reset().play()
+        break;
+        case "Door_1":
+        case "Door_3":
+            model.actions['DoorOpen'].reset().play()
+        break;
         case "Shrimp_1":
         case "Guitar_2":
             if (!shrimp.isPlaying) {
@@ -32,20 +41,9 @@ export function click_interact(object){
                 shrimp.currentTime = 0;
                 shrimp.isPlaying = false;
             }
-            break;
-        // THE MUG
-        case "Water":
-        case "Mug":
-            // TODO: Make mug holdable.
-            // TODO: Holdable class.
-            if (!mug.hand) {
-                mug.position.set(0,4,3);
-                mug.hand = true;
-            }
-            else {
-                mug.position.set(0,3.5,-2);
-                mug.hand = false;
-            }
+            model.actions['ShrimpAction'].reset().play();
+            model.actions['GuitarAction'].reset().play();
+
         break;
         case "Lake":
             if (mug.hand){

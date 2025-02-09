@@ -63,7 +63,10 @@ function onLeftMouseClick(event) {
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
         console.log('Left Clicked object:', clickedObject.name || clickedObject.uuid);
-        
+
+        // console.log(clickedObject?.onClick);
+        // clickedObject?.onClick();
+
         interact.click_interact(clickedObject);
     }
 }

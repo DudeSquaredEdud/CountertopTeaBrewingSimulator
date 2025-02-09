@@ -8,8 +8,17 @@ let moveBackward = false;
 let moveLeft = false;
 let moveRight = false;
 
+let isGrounded = false; // Track if player is on the ground
+const GRAVITY = -150; // Gravity force
+const JUMP_FORCE = 30 * 100; // Jump force
+let verticalVelocity = 0; // Vertical movement
+
+export let speedfactor = 200;
 
 const onKeyDown = function ( event ) {
+
+    event.preventDefault();
+    // console.log(event.code);
     switch ( event.code ) {
         case 'ArrowUp':
         case 'KeyW':
@@ -30,11 +39,22 @@ const onKeyDown = function ( event ) {
         case 'KeyD':
             moveRight = true;
             break;
+
+        case 'ShiftLeft':
+            speedfactor = 400;
+            main.camera.setFocalLength(15);
+        break;
+        case 'KeyC':
+            main.camera.setFocalLength(80);
+        break;
+        
     }
 
 };
 
 const onKeyUp = function ( event ) {
+
+    event.preventDefault();
     switch ( event.code ) {
 
         case 'ArrowUp':
@@ -56,6 +76,18 @@ const onKeyUp = function ( event ) {
         case 'KeyD':
             moveRight = false;
             break;
+
+        case 'ShiftLeft':
+            speedfactor = 200;
+            main.camera.setFocalLength(18);
+        break;
+        case 'KeyC':
+            if (speedfactor == 400)
+                main.camera.setFocalLength(15);
+            else 
+            main.camera.setFocalLength(18);
+
+        break;
 
     }
 
@@ -107,67 +139,59 @@ let collide = 0;
 let distance = 0;
 
 
-function OLDmove(){
-    const time = performance.now();
-    if (cam.controls?.isLocked == true){
-        const delta = ( time - prevTime )/1000;
-        
-        velocity.x -= velocity.x * 10.0 * delta;
-        velocity.z -= velocity.z * 10.0 * delta;
-        
-        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-        direction.x -= Number( moveForward ) - Number( moveBackward );
-        direction.z -= Number( moveRight ) - Number( moveLeft );
-        direction.normalize();
+function checkGrounded() {
+    const groundRay = new THREE.Raycaster(
+        main.camera.position, // Start at camera
+        new THREE.Vector3(0, -1, 0), // Point downward
+        0, // Near
+        6.5 // Distance to ground
+    );
 
-        // console.log(cam.controls);
-
-         // this ensures consistent movements in all directions
-        waistIntersect = click.raycastIntersectFromCenter();
-        // console.log(waistIntersect[0]);
-        distance = waistIntersect[0]?.distance;
-        main.scene.getObjectByName("mug_model").position.z = waistIntersect[0].point.z;
-        main.scene.getObjectByName("mug_model").position.x = waistIntersect[0].point.x;
-        if ( moveForward || moveBackward ) velocity.z -= -direction.x * 200.0 * delta;
-        if ( moveLeft || moveRight ) velocity.x -= -direction.z * 200.0 * delta ;
-        
-        collide = checkCollision(direction);
-
-        
-        if(!collide){
-            cam.controls?.moveRight( - velocity.x * delta);
-            cam.controls?.moveForward( - velocity.z * delta);
-        }
-        else{
-            cam.controls?.moveRight( - 4 * delta);
-            cam.controls?.moveForward( - 4 * delta);
-        }
-      
-        
-
-        
-    }
-    prevTime = time;
+    const intersects = groundRay.intersectObjects(main.scene.children, true);
+    isGrounded = intersects.some(intersect => intersect.object.isGround);
 }
+
+let jumpRequested = false;
+
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space' && isGrounded) {
+        jumpRequested = true;
+    }
+});
+
 
 export function move(){
     const time = performance.now();
     if (cam.controls?.isLocked == true){
         const delta = ( time - prevTime )/1000;
 
+        // ======== GROUND DETECTION ========
+        checkGrounded();
+        
+        // ======== GRAVITY & JUMPING ========
+        if (isGrounded) {
+            verticalVelocity = 0; // Reset vertical velocity when grounded
+            if (jumpRequested) { // Jump if spacebar is pressed
+                verticalVelocity = JUMP_FORCE * delta;
+                jumpRequested = false; // Consume jump input
+            }
+        } else {
+            verticalVelocity += GRAVITY * delta; // Apply gravity
+        }
+
         // ======== DIRECTION CALCULATION ========
         const cameraForward = new THREE.Vector3();
         main.camera.getWorldDirection(cameraForward);
         cameraForward.y = 0;
         cameraForward.normalize();
-
+        
         const cameraRight = new THREE.Vector3();
         cameraRight.crossVectors(main.camera.up, cameraForward).normalize();
-
+        
         // ======== VELOCITY RESET ========
         velocity.x -= velocity.x * 10.0 * delta;
         velocity.z -= velocity.z * 10.0 * delta;
-
+        
         // ======== INPUT HANDLING ========
         const inputVector = new THREE.Vector3();
         if(moveForward) inputVector.add(cameraForward);
@@ -175,16 +199,16 @@ export function move(){
         if(moveLeft) inputVector.sub(cameraRight);
         if(moveRight) inputVector.add(cameraRight);
         inputVector.normalize();
-
+        
         // ======== COLLISION DETECTION ========
-        const speed = 200 * delta;
+        const speed = speedfactor * delta;
         const intendedMove = inputVector.clone().multiplyScalar(speed);
-
+        
         const probes = [
             new THREE.Vector3(1, -3, 0),   // Right probe
             new THREE.Vector3(-1, -3, 0),  // Left probe
-            new THREE.Vector3(0, -3, 0),      // Center probe
-            new THREE.Vector3(0, -3, -1)      // forward probe
+            new THREE.Vector3(0, -3, 0),   // Center probe
+            new THREE.Vector3(0, -3, -1)   // Forward probe
         ];
 
         probes.forEach(offset => {
@@ -195,7 +219,7 @@ export function move(){
                 0,
                 intendedMove.length() + 0.5
             );
-
+            
             const intersects = ray.intersectObjects(main.scene.children, true);
             intersects.forEach(intersect => {
                 if(intersect.object.isWall) {
@@ -237,9 +261,12 @@ export function move(){
         });
 
         // ======== FINAL MOVEMENT ========
-        // Apply velocity in camera-relative space
+        // Apply horizontal movement
         cam.controls.moveRight(velocity.x * delta);
         cam.controls.moveForward(velocity.z * delta);
+        
+        // Apply vertical movement
+        cam.controls.getObject().position.y += verticalVelocity * delta;
     }
     prevTime = time;
 }
