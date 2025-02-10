@@ -11,9 +11,8 @@ let verticalVelocity = 0; // Vertical movement
 const probes = [
     new THREE.Vector3(.5, -4, 0),   // Right probe
     new THREE.Vector3(-.5, -4, 0),  // Left probe
-    // new THREE.Vector3(0, -4, 0),   // Center probe
+    new THREE.Vector3(0, -2, 0),   // Center probe
     new THREE.Vector3(0, -4, -.5),   // Forward probe
-    new THREE.Vector3(0, -4, .5)   // Backward probe
 ];
 
 export let speedfactor = 200;
@@ -150,10 +149,10 @@ export function move(){
         
         // ======== GRAVITY & JUMPING ========
         if (isGrounded) {
-            verticalVelocity = verticalVelocity > 0 ? verticalVelocity : 0; // Reset vertical velocity when grounded
-            if (jumpRequested) { // Jump if spacebar is pressed
+            verticalVelocity = verticalVelocity > 0 ? verticalVelocity : 0;
+            if (jumpRequested) {
                 verticalVelocity = JUMP_FORCE * delta;
-                jumpRequested = false; // Consume jump input
+                jumpRequested = false;
             }
         } else {
             verticalVelocity += GRAVITY * delta; // Apply gravity

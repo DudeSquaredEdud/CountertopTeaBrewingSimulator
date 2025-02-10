@@ -17,13 +17,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 loading.loading_quote();
-await init.initialization_Countertop();
-
-console.log("shart")
-
-camera.setFocalLength(18);
-document.getElementById("LoadingScreen").style.display = "none";
-
 // Light!
 light.standardLight(scene);
 // light.ambientOnly(scene);
@@ -38,6 +31,13 @@ scene.add(skybox)
 
 // set the camera to normal mode
 cam.neutralPos(true);
+
+
+await init.initialization_Countertop();
+
+camera.setFocalLength(18);
+document.getElementById("LoadingScreen").style.display = "none";
+
 
 renderer.setAnimationLoop(() => {
     renderer.render(scene, camera);
