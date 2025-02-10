@@ -1,6 +1,5 @@
 import * as cam from "./camera.js";
 import * as THREE from 'three';
-import * as click from "./clicking.js";
 import * as main from './main.js';
 
 let moveForward = false;
@@ -47,7 +46,8 @@ const onKeyDown = function ( event ) {
         case 'KeyC':
             main.camera.setFocalLength(80);
         break;
-        
+        case "KeyP":
+            main.camera.position.set(0,6.5,5.4);
     }
 
 };
@@ -159,7 +159,6 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-
 export function move(){
     const time = performance.now();
     if (cam.controls?.isLocked == true){
@@ -170,7 +169,7 @@ export function move(){
         
         // ======== GRAVITY & JUMPING ========
         if (isGrounded) {
-            verticalVelocity = 0; // Reset vertical velocity when grounded
+            verticalVelocity = verticalVelocity > 0 ? verticalVelocity : 0; // Reset vertical velocity when grounded
             if (jumpRequested) { // Jump if spacebar is pressed
                 verticalVelocity = JUMP_FORCE * delta;
                 jumpRequested = false; // Consume jump input
@@ -205,10 +204,11 @@ export function move(){
         const intendedMove = inputVector.clone().multiplyScalar(speed);
         
         const probes = [
-            new THREE.Vector3(1, -3, 0),   // Right probe
-            new THREE.Vector3(-1, -3, 0),  // Left probe
-            new THREE.Vector3(0, -3, 0),   // Center probe
-            new THREE.Vector3(0, -3, -1)   // Forward probe
+            new THREE.Vector3(.5, -4, 0),   // Right probe
+            new THREE.Vector3(-.5, -4, 0),  // Left probe
+            // new THREE.Vector3(0, -4, 0),   // Center probe
+            new THREE.Vector3(0, -4, -.5),   // Forward probe
+            new THREE.Vector3(0, -4, .5)   // Backward probe
         ];
 
         probes.forEach(offset => {
@@ -222,9 +222,12 @@ export function move(){
             
             const intersects = ray.intersectObjects(main.scene.children, true);
             intersects.forEach(intersect => {
+                if(intersect.object.isGround){
+                    cam.controls.getObject().position.y += (cam.controls.getObject().position.y - intersect.point.y)*delta;
+                }
+                else stepForce = 1;
                 if(intersect.object.isWall) {
-                    const allowed = intersect.object.penetrationAllowed || 0;
-                    const safeDistance = intersect.distance - 1 - allowed;
+                    const safeDistance = intersect.distance - 1;
                     if(safeDistance < intendedMove.length()) {
                         const clampRatio = Math.max(safeDistance / intendedMove.length(), 0);
                         intendedMove.multiplyScalar(clampRatio);
@@ -254,7 +257,7 @@ export function move(){
         correctionRay.intersectObjects(main.scene.children, true).forEach(intersect => {
             if(intersect.object.isWall) {
                 const pushForce = intersect.face.normal.clone()
-                    .multiplyScalar(0.1 + (intersect.object.pushBack || 0));
+                    .multiplyScalar(1+0.1 + (intersect.object.pushBack || 0));
                 pushForce.y = 0;
                 velocity.add(pushForce);
             }

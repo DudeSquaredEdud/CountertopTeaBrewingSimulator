@@ -47,8 +47,7 @@ export function initialization_Countertop(){
         childPropsRecursive(thing, {
             isWall: true
         })
-        childPropsRecursive(thing.getObjectByName("Grass"), { isGround: true });
-        childPropsRecursive(thing.getObjectByName("Road"), { isGround: true });
+        childPropsRecursive(thing, { isGround: true });
     });
     init("shrimp_model", 'meshes/shrimp.glb', (thing) =>{
         thing.position.set(10,0,-35);
@@ -89,13 +88,21 @@ export function initialization_Countertop(){
         childTooltip(thing, "Mug");
         childProp(thing, "hand", false);
     });
-    init("magnafier_model", "meshes/magnafier.glb");
+    init("magnafier_model", "meshes/magnafier.glb",  (thing) => {
+        thing.position.set(-400,0,-16);
+        childPropsRecursive(thing, {
+            isWall: true
+        })
+        childPropsRecursive(thing.getObjectByName("Mountain"), { isGround: true });
+
+    });
     init("DemonLadyNoRig_model", "meshes/DemonLadyNoRig.glb", (thing) => {
         thing.position.set(100,0,-16);
         thing.rotation.set(0,-1.52,0);
         console.log(model.actions);
-        model.actions['DemonYeah'].setLoop(THREE.LoopRepeat, 100);
-        model.actions['DemonYeah'].reset().play()
+        model.actions['DemonYeah'].setLoop(THREE.LoopRepeat, 100000);
+        model.actions['DemonYeah'].reset().play();
+        childPropsRecursive(thing, {frustumCulled: false});
     });
     init("demonhouse_model", "meshes/demonhouse.glb", (thing) => {
         childPropsRecursive(thing, {

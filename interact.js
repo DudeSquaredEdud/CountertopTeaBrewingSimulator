@@ -67,6 +67,8 @@ export function click_interact(object){
         case "Paper":
         case "Paper_2":
             document.getElementById("info_screen").style.display = "unset";
+            setTimeout(() => {
+                document.getElementById("info_screen").style.display = "none";}, 4000);
         break;
         case "CV_Paper":
             cam.CVPos();
