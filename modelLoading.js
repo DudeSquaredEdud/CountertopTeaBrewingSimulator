@@ -21,41 +21,48 @@ function dumpObject(obj, lines = [], isLast = true, prefix = '') {
 export const actions = {};
 
 export function quickLoad(scene, name, path, dump = true) {
-    const loader = new GLTFLoader(); 
-    loader.load( path, 
-        ( gltf ) => {
-            const root = gltf.scene;
-            const animations = gltf.animations;
-            scene.add( root );
-            if (dump) console.log(dumpObject(root).join('\n'));
-            root.name = name;
+    return new Promise((resolve, reject) => {
+        const loader = new GLTFLoader();
+        loader.load(
+            path,
+            (gltf) => {
+                const root = gltf.scene;
+                const animations = gltf.animations;
+                scene.add(root);
+                if (dump) console.log(dumpObject(root).join('\n'));
+                root.name = name;
 
-            if(animations){
-                  // ====== ANIMATION SETUP ======
-                  const mixer = new THREE.AnimationMixer(root);
-                  
-                  // Create animation actions
-                  animations.forEach((clip) => {
-                      actions[clip.name] = mixer.clipAction(clip);
-                  });
+                if (animations) {
+                    // ====== ANIMATION SETUP ======
+                    const mixer = new THREE.AnimationMixer(root);
 
+                    // Create animation actions
+                    animations.forEach((clip) => {
+                        actions[clip.name] = mixer.clipAction(clip);
+                    });
 
-                  // ====== ANIMATION LOOP ======
-                  const clock = new THREE.Clock();
-                  function animate() {
-                      requestAnimationFrame(animate);
+                    // ====== ANIMATION LOOP ======
+                    const clock = new THREE.Clock();
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        const delta = clock.getDelta();
+                        mixer.update(delta);
+                    }
 
-                      // Update mixer with delta time
-                      const delta = clock.getDelta();
-                      mixer.update(delta);
-                  }
+                    animate();
+                }
 
-                  animate();
-              }
-
-        }, undefined, function ( error ) {
-
-            console.error( error );
-
-        });
-};
+                resolve(root); // Resolve the promise with the loaded object
+            },
+            // Progress callback (optional)
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            // Error callback
+            (error) => {
+                console.error(error);
+                reject(error);
+            }
+        );
+    });
+}

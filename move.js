@@ -1,18 +1,30 @@
 import * as cam from "./camera.js";
 import * as THREE from 'three';
+import * as click from "./clicking.js";
 import * as main from './main.js';
-
-let moveForward = false;
-let moveBackward = false;
-let moveLeft = false;
-let moveRight = false;
 
 let isGrounded = false; // Track if player is on the ground
 const GRAVITY = -150; // Gravity force
 const JUMP_FORCE = 30 * 100; // Jump force
 let verticalVelocity = 0; // Vertical movement
 
+const probes = [
+    new THREE.Vector3(.5, -4, 0),   // Right probe
+    new THREE.Vector3(-.5, -4, 0),  // Left probe
+    // new THREE.Vector3(0, -4, 0),   // Center probe
+    new THREE.Vector3(0, -4, -.5),   // Forward probe
+    new THREE.Vector3(0, -4, .5)   // Backward probe
+];
+
 export let speedfactor = 200;
+
+const keyState = {
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    shift: false
+};
 
 const onKeyDown = function ( event ) {
 
@@ -21,22 +33,22 @@ const onKeyDown = function ( event ) {
     switch ( event.code ) {
         case 'ArrowUp':
         case 'KeyW':
-            moveForward = true;
+            keyState.forward = true;
             break;
 
         case 'ArrowLeft':
         case 'KeyA':
-            moveLeft = true;
+            keyState.left = true;
             break;
 
         case 'ArrowDown':
         case 'KeyS':
-            moveBackward = true;
+            keyState.backward = true;
             break;
 
         case 'ArrowRight':
         case 'KeyD':
-            moveRight = true;
+            keyState.right = true;
             break;
 
         case 'ShiftLeft':
@@ -59,22 +71,22 @@ const onKeyUp = function ( event ) {
 
         case 'ArrowUp':
         case 'KeyW':
-            moveForward = false;
+            keyState.forward = false;
             break;
 
         case 'ArrowLeft':
         case 'KeyA':
-            moveLeft = false;
+            keyState.left = false;
             break;
 
         case 'ArrowDown':
         case 'KeyS':
-            moveBackward = false;
+            keyState.backward = false;
             break;
 
         case 'ArrowRight':
         case 'KeyD':
-            moveRight = false;
+            keyState.right = false;
             break;
 
         case 'ShiftLeft':
@@ -93,39 +105,12 @@ const onKeyUp = function ( event ) {
 
 };
 
-function checkCollision(directionVector) {
-    const raycaster = new THREE.Raycaster(
-        main.camera.position, 
-        directionVector.normalize(),
-        0, 
-        1.5 // Probe depth ( ͡° ͜ʖ ͡°)
-    );
-
-    const intersects = raycaster.intersectObjects(main.scene.children, true);
-    
-    return intersects.some(intersect => {
-        const obj = intersect.object;
-        // Traverse up parent chain looking for collision properties
-        let current = obj;
-        while(current.parent) {
-            // Check if anyone in the family tree likes getting hit
-            if(current.isWall || current.collisionType) {
-                // Calculate penetration resistance
-                return true;
-            }
-            current = current.parent;
-        }
-        return false;
-    });
-}
-
 
 document.addEventListener( 'keydown', onKeyDown );
 document.addEventListener( 'keyup', onKeyUp );
 
 
-const velocity = new THREE.Vector3();
-const direction = new THREE.Vector3(0,0,0);
+let velocity = new THREE.Vector3();
 let controls;
 setTimeout(() => {
     controls = cam.controls;
@@ -133,10 +118,6 @@ setTimeout(() => {
 }, 500)
 
 let prevTime = performance.now();
-let waistIntersect = [];
-
-let collide = 0;
-let distance = 0;
 
 
 function checkGrounded() {
@@ -160,7 +141,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 export function move(){
-    const time = performance.now();
+    let time = performance.now();
     if (cam.controls?.isLocked == true){
         const delta = ( time - prevTime )/1000;
 
@@ -193,23 +174,15 @@ export function move(){
         
         // ======== INPUT HANDLING ========
         const inputVector = new THREE.Vector3();
-        if(moveForward) inputVector.add(cameraForward);
-        if(moveBackward) inputVector.sub(cameraForward);
-        if(moveLeft) inputVector.sub(cameraRight);
-        if(moveRight) inputVector.add(cameraRight);
+        if(keyState.forward) inputVector.add(cameraForward);
+        if(keyState.backward) inputVector.sub(cameraForward);
+        if(keyState.left) inputVector.sub(cameraRight);
+        if(keyState.right) inputVector.add(cameraRight);
         inputVector.normalize();
         
         // ======== COLLISION DETECTION ========
         const speed = speedfactor * delta;
         const intendedMove = inputVector.clone().multiplyScalar(speed);
-        
-        const probes = [
-            new THREE.Vector3(.5, -4, 0),   // Right probe
-            new THREE.Vector3(-.5, -4, 0),  // Left probe
-            // new THREE.Vector3(0, -4, 0),   // Center probe
-            new THREE.Vector3(0, -4, -.5),   // Forward probe
-            new THREE.Vector3(0, -4, .5)   // Backward probe
-        ];
 
         probes.forEach(offset => {
             const rayOrigin = main.camera.position.clone().add(offset);
@@ -225,7 +198,6 @@ export function move(){
                 if(intersect.object.isGround){
                     cam.controls.getObject().position.y += (cam.controls.getObject().position.y - intersect.point.y)*delta;
                 }
-                else stepForce = 1;
                 if(intersect.object.isWall) {
                     const safeDistance = intersect.distance - 1;
                     if(safeDistance < intendedMove.length()) {

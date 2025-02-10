@@ -17,7 +17,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 loading.loading_quote();
-init.initialization_Countertop();
+await init.initialization_Countertop();
+
+console.log("shart")
+
+camera.setFocalLength(18);
+document.getElementById("LoadingScreen").style.display = "none";
 
 // Light!
 light.standardLight(scene);
