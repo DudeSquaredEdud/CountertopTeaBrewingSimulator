@@ -38,16 +38,16 @@ export async function initialization_Countertop(){
     return new Promise(async (resolve) => {
         const initsequence = async () => {        
         // Add the countertop to the scene.
-        await init("CV_Room", 'meshes/CV_Room.glb', (thing) => {
+        await init("CV_Room", 'assets/models/CV_Room.glb', (thing) => {
             thing.position.set(0,-50,0);
         });
-        await init("outside_model", 'meshes/outside.glb', (thing) => {
+        await init("outside_model", 'assets/models/outside.glb', (thing) => {
             childPropsRecursive(thing, {
                 isWall: true
             })
             childPropsRecursive(thing, { isGround: true });
         });
-        await init("shrimp_model", 'meshes/shrimp.glb', (thing) =>{
+        await init("shrimp_model", 'assets/models/shrimp.glb', (thing) =>{
             thing.position.set(10,0,-35);
             thing.rotation.set(0,-45,0);
             thing.scale.set(.1,.1,.1);
@@ -55,7 +55,7 @@ export async function initialization_Countertop(){
             model.actions['ShrimpAction'].setLoop(THREE.LoopOnce);
             model.actions['GuitarAction'].setLoop(THREE.LoopOnce);
         });
-        await init("wallsAndFloor_model", 'meshes/wallsAndFloor.glb', (thing) => {
+        await init("wallsAndFloor_model", 'assets/models/wallsAndFloor.glb', (thing) => {
             childPropsRecursive(thing, {
                 isWall: true
             })
@@ -63,22 +63,22 @@ export async function initialization_Countertop(){
     
             childPropsRecursive(thing.getObjectByName("Bed"), { isGround: true });
         });
-        await init("countertop_model", 'meshes/countertop.glb', (thing) => {
+        await init("countertop_model", 'assets/models/countertop.glb', (thing) => {
             childPropsRecursive(thing, {
                 isWall: true
             })
         });
-        await init("paper_model", 'meshes/paber.glb', (thing) => {
+        await init("paper_model", 'assets/models/paber.glb', (thing) => {
             thing.position.set(-2.3,.8,-2);
             childTooltip(thing, "Game Info");
         });
-        await init("paper_model_CV", 'meshes/paber.glb', (thing) => {
+        await init("paper_model_CV", 'assets/models/paber.glb', (thing) => {
             let cv_paper = main.scene.getObjectByName("paper_model_CV");
             cv_paper.position.set(2.3,.8,-2);
             cv_paper.getObjectByName("Paper_2").name = "CV_Paper";
             childTooltip(thing, "CV");
         });
-        await init("mug_model", 'meshes/mug.glb', (thing) =>{
+        await init("mug_model", 'assets/models/mug.glb', (thing) =>{
             thing.position.set(0,3.5,-2);
             thing.rotation.set(0,90,0);
             thing.hand = false;
@@ -86,7 +86,7 @@ export async function initialization_Countertop(){
             childTooltip(thing, "Mug");
             childProp(thing, "hand", false);
         });
-        await init("magnafier_model", "meshes/magnafier.glb",  (thing) => {
+        await init("magnafier_model", "assets/models/magnafier.glb",  (thing) => {
             thing.position.set(-400,0,-16);
             childPropsRecursive(thing, {
                 isWall: true
@@ -94,7 +94,7 @@ export async function initialization_Countertop(){
             childPropsRecursive(thing.getObjectByName("Mountain"), { isGround: true });
     
         });
-        await init("DemonLadyNoRig_model", "meshes/DemonLadyNoRig.glb", (thing) => {
+        await init("DemonLadyNoRig_model", "assets/models/DemonLadyNoRig.glb", (thing) => {
             thing.position.set(100,0,-16);
             thing.rotation.set(0,-1.52,0);
             console.log(model.actions);
@@ -102,7 +102,7 @@ export async function initialization_Countertop(){
             model.actions['DemonYeah'].reset().play();
             childPropsRecursive(thing, {frustumCulled: false});
         });
-        await init("demonhouse_model", "meshes/demonhouse.glb", (thing) => {
+        await init("demonhouse_model", "assets/models/demonhouse.glb", (thing) => {
             childPropsRecursive(thing, {
                 isWall: true
             })

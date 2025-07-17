@@ -1,0 +1,38 @@
+{
+  "name": "countertop-tea-brewing-simulator",
+  "version": "1.0.0",
+  "description": "An interactive 3D tea brewing simulator built with Three.js",
+  "main": "index.html",
+  "scripts": {
+    "start": "node tools/dev-server.js",
+    "dev": "node tools/dev-server.js 3000",
+    "build": "echo 'Build process not implemented - this is a static site'",
+    "test": "echo 'Tests not implemented yet'",
+    "lint": "echo 'Linting not configured yet'",
+    "serve": "node tools/dev-server.js 8080"
+  },
+  "keywords": [
+    "threejs",
+    "webgl",
+    "3d",
+    "game",
+    "simulation",
+    "tea",
+    "interactive"
+  ],
+  "author": "Ashton Andrepont",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/CountertopTeaBrewingSimulator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/CountertopTeaBrewingSimulator/issues"
+  },
+  "homepage": "https://github.com/your-username/CountertopTeaBrewingSimulator#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
